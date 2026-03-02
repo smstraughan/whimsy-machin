@@ -10,7 +10,7 @@ const Header = () => {
         <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
           🌪 Whimsy Machine
         </Navbar.Brand>
-        <Button variant="outline-dark" onClick={() => navigate("/adventure")}>
+        <Button variant="outline-dark" onClick={() => navigate("/")}>
           Start Again
         </Button>
       </Container>
