@@ -1,19 +1,28 @@
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap"; // if you're using it
 
 const HomePage = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-    <div className="text-center mt-5" style={{ flex: 1 }}>
-      <h1>Welcome to Whimsy Machine</h1>
-      <p>TO DO: Add a button that takes you to the whimsy page</p>
-      <p>Add some color and animation if it strikes the fancy</p>
-      <p>Silly Goose Side Bar needs the joke functionality</p>
-      <p>Whimsy page needs the most work!</p>
-    </div>
-     <Footer /> 
-</div>
+      <div className="text-center mt-5" style={{ flex: 1 }}>
+        <h1>Welcome to Whimsy Machine</h1>
+        <div style={{ marginTop: "2rem", textAlign: "center" }}>
+          <span style={{ marginRight: "10px", fontSize: "1.1rem" }}>
+            Go out on a whim 👉
+          </span>
 
-  );
+          <Link to="/whim" style={{ textDecoration: "none" }}>
+            <Button variant="primary">
+              Whim
+            </Button>
+          </Link>
+        </div>
+        <Footer />
+      </div>
+    </div>
+
+      );
 };
 
-export default HomePage
+      export default HomePage
