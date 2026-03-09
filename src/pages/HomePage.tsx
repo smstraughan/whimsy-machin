@@ -12,22 +12,14 @@ const HomePage = () => {
             Go out on a whim 👉
           </span>
 
-          <p>
-            To Do:
-            Make Footer Stay at bottom of page no matter what
-            There was a problem where I went to duck page and then the animal page didnt refresh until i hit start again
-            How do I want to start over in my whim page???
-
-          </p>
-
           <Link to="/whim" style={{ textDecoration: "none" }}>
             <Button variant="primary">
               Whim
             </Button>
           </Link>
         </div>
-        <Footer />
       </div>
+       <Footer />
     </div>
 
       );
