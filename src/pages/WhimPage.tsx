@@ -14,6 +14,9 @@ import {
   deleteCreatura
 } from "../services/creaturaService";
 import ImageFrame from "../components/ImageFrame";
+import GalleryCard from "../components/GalleryCard";
+import AnimalCard from "../components/AnimalCard";
+import ConfirmingCard from "../components/ConfirmingCard";
 
 type Mode =
   | "start"
@@ -166,101 +169,42 @@ const WhimPage = () => {
 
           {/* NAMING SCREEN */}
           {mode === "naming" && currentAnimal && selectedType && (
-            <div key={currentAnimal.id} className="mt-4">
-
-              {selectedType === "cat" && catsSeenCount === 1 && (
-                <h2>Okay, then name a kitty!</h2>
-              )}
-
-              <ImageFrame src={currentAnimal.imageUrl} alt="animal" />
-
-              <p className="mt-3">
-                Hi, I'm {currentAnimal.age} and my hobbies include{" "}
-                {currentAnimal.hobbies}.
-              </p>
-
-              <input
-                type="text"
-                value={proposedName}
-                onChange={(e) => setProposedName(e.target.value)}
-                className="form-control w-50 mx-auto"
-              />
-
-              <Button
-                className="mt-3"
-                onClick={
-                  currentCreatura
-                    ? handleUpdateCreatura
-                    : handleCreateCreatura
-                }
-                disabled={!proposedName.trim()}
-              >
-                Submit Name
-              </Button>
-
-              {/*DOG REJECTION BUTTON*/}
-              {selectedType === "dog" && (
-                <div className="mt-3">
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setCurrentAnimal(null);
-                      setCurrentCreatura(null);
-                      setProposedName("");
-                      startAnimalFlow("cat");
-                    }}
-                  >
-                    Nevermind, I am no longer a dog person
-                  </Button>
-                </div>
-              )}
-
-
-              {/* CAT REJECTION BUTTON */}
-              {selectedType === "cat" && (
-                <div className="mt-3">
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setCurrentAnimal(null);
-                      setSelectedType(null);
-                      setMode("duckPhase");
-                    }}
-                  >
-                    {catsSeenCount === 1 ? "I'm not a cat person either" : "I've changed my mind, I'm done with cats."}
-                  </Button>
-                </div>
-              )}
-            </div>
+            <AnimalCard
+              animal={currentAnimal}
+              selectedType={selectedType}
+              catsSeenCount={catsSeenCount}
+              proposedName={proposedName}
+              onNameChange={setProposedName}
+              onSubmit={currentCreatura ? handleUpdateCreatura : handleCreateCreatura}
+              onDogRejection={() => {
+                setCurrentAnimal(null);
+                setCurrentCreatura(null);
+                setProposedName("");
+                startAnimalFlow("cat");
+              }}
+              onCatRejection={() => {
+                setCurrentAnimal(null);
+                setSelectedType(null);
+                setMode("duckPhase");
+              }}
+            />
           )}
 
           {/* CONFIRMING */}
           {mode === "confirming" && currentCreatura && (
-            <div className="mt-4">
-              <ImageFrame src={currentCreatura.imageUrl} alt={currentCreatura.name} />
-              <h4> Hi, my name is {currentCreatura.name}.</h4>
-
-              <Button onClick={() => {
-                if (currentCreatura) {
-                  setCreaturas(prev => [...prev, currentCreatura]);
-                }
+            <ConfirmingCard
+              creatura={currentCreatura}
+              selectedType={selectedType}
+              onConfirm={() => {
+                setCreaturas(prev => [...prev, currentCreatura]);
                 setMode("finalized");
-              }}>
-                {selectedType === "cat" ? "Meow!" : "Good Boy"}
-              </Button>
-
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setProposedName(currentCreatura.name);
-                  setMode("naming");
-                }}
-              >
-                That's Not Quite Right
-              </Button>
-            </div>
+              }}
+              onRename={() => {
+                setProposedName(currentCreatura.name);
+                setMode("naming");
+              }}
+            />
           )}
-
           {/* FINALIZED */}
           {mode === "finalized" && currentCreatura && (
             <div className="mt-4">
@@ -315,25 +259,13 @@ const WhimPage = () => {
                 <Row>
                   {creaturas.map(c => (
                     <Col md={4} key={c.id} className="mb-4">
-                      <img
-                        src={c.imageUrl}
-                        alt={c.name}
-                        style={{ width: "100%", borderRadius: "12px" }}
-                      />
-                      <h5>{c.name}</h5>
-
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={async () => {
-                          await deleteCreatura(c.id!);
-                          setCreaturas(prev =>
-                            prev.filter(x => x.id !== c.id)
-                          );
+                      <GalleryCard
+                        creatura={c}
+                        onDelete={async (id) => {
+                          await deleteCreatura(id);
+                          setCreaturas(prev => prev.filter(x => x.id !== id));
                         }}
-                      >
-                        Send Back to the Pound
-                      </Button>
+                      />
                     </Col>
                   ))}
                 </Row>

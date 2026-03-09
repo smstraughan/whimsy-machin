@@ -37,7 +37,7 @@ const VoidPage = () => {
           onClick={() => setShowModal(true)}
           className="mb-4"
         >
-          I would like to scream into the void
+          Click here to scream into the void
         </Button>
 
         {/* Display Screams */}
@@ -55,7 +55,7 @@ const VoidPage = () => {
             className="mt-4"
             onClick={handleRelease}
           >
-            Send them off forever
+            Send into the abyss
           </Button>
         )}
 
@@ -64,7 +64,7 @@ const VoidPage = () => {
       {/* Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>What would you like to yell?</Modal.Title>
+          <Modal.Title>At the top of your lungs....</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -74,7 +74,7 @@ const VoidPage = () => {
                 rows={3}
                 value={currentMessage}
                 onChange={(e) => setCurrentMessage(e.target.value)}
-                placeholder="Scream here..."
+                placeholder="Scream here"
               />
             </Form.Group>
           </Form>
@@ -84,7 +84,7 @@ const VoidPage = () => {
             Nevermind
           </Button>
           <Button variant="dark" onClick={handleSubmit}>
-            Scream
+            Scream!
           </Button>
         </Modal.Footer>
       </Modal>
