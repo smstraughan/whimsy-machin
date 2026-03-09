@@ -3,6 +3,8 @@ import type { Creatura } from "../types/Creatura";
 
 const CREATURA_ENDPOINT = `${BASE_URL}/Creatura`;
 
+//GET creaturas from creatura api
+
 export const getAllCreaturas = async (): Promise<Creatura[]> => {
   try {
     const response = await fetch(CREATURA_ENDPOINT);

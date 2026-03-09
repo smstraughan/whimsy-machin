@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import type { Animal } from "../types/Animal";
 import ImageFrame from "./ImageFrame";
 
-// Define the shape of props this component accepts
+// Types the props this component accepts
 // Each "on" prop is a callback function passed down from WhimPage
 interface AnimalCardProps {
   animal: Animal;
@@ -27,12 +27,12 @@ const AnimalCard = ({
 }: AnimalCardProps) => (
   <div key={animal.id} className="mt-4">
 
-    {/* Only show the kitty heading if it's the first cat the user has seen */}
+    {/* Only show the Okay kitty heading if it's the first cat the user has seen */}
     {selectedType === "cat" && catsSeenCount === 1 && (
       <h2>Okay, then name a kitty!</h2>
     )}
 
-    {/* ImageFrame is a reusable component that wraps the image in a fixed size container */}
+    {/* ImageFrame is a  component that wraps the image in a fixed size container */}
     <ImageFrame src={animal.imageUrl} alt="animal" />
 
     {/* Display the animal's age and hobbies from the API data */}
@@ -60,7 +60,7 @@ const AnimalCard = ({
     {/* Dog rejection button -- only shown if the user is in the dog flow */}
     {selectedType === "dog" && (
       <div className="mt-3">
-        <Button variant="secondary" onClick={onDogRejection}>
+        <Button variant="secondary" onClick={onDogRejection}> 
           Nevermind, I am no longer a dog person
         </Button>
       </div>

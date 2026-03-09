@@ -1,6 +1,6 @@
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap"; // if you're using it
+import { Button } from "react-bootstrap";
 
 const HomePage = () => {
   return (
@@ -11,7 +11,7 @@ const HomePage = () => {
           <span style={{ marginRight: "10px", fontSize: "1.1rem" }}>
             Go out on a whim 👉
           </span>
-
+          {/**Button that takes you to whim page */}
           <Link to="/whim" style={{ textDecoration: "none" }}>
             <Button variant="primary">
               Whim
@@ -19,10 +19,10 @@ const HomePage = () => {
           </Link>
         </div>
       </div>
-       <Footer />
+      <Footer /> {/**Use my footer component --  */}
     </div>
 
-      );
+  );
 };
 
-      export default HomePage
+export default HomePage

@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import type { Creatura } from "../types/Creatura";
 import ImageFrame from "./ImageFrame";
 
-// Define the shape of props this component accepts
+// Types of props this component accepts
 // selectedType can be null if the user has not chosen a type yet
 interface ConfirmingCardProps {
   creatura: Creatura; // the creatura that was just created via the API

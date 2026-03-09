@@ -18,6 +18,8 @@ import GalleryCard from "../components/GalleryCard";
 import AnimalCard from "../components/AnimalCard";
 import ConfirmingCard from "../components/ConfirmingCard";
 
+//Mode-based state approach for a multi-step flow
+
 type Mode =
   | "start"
   | "naming"
@@ -29,20 +31,21 @@ type Mode =
 
 
 const WhimPage = () => {
+  //Set Use States
   const navigate = useNavigate();
-
-  const [animals, setAnimals] = useState<Animal[]>([]);
-  const [creaturas, setCreaturas] = useState<Creatura[]>([]);
-  const [mode, setMode] = useState<Mode>("start");
-  const [usedAnimalIds, setUsedAnimalIds] = useState<string[]>([]);
-  const [currentAnimal, setCurrentAnimal] = useState<Animal | null>(null);
-  const [currentCreatura, setCurrentCreatura] = useState<Creatura | null>(null);
-  const [proposedName, setProposedName] = useState("");
-  const [selectedType, setSelectedType] =
+  const [animals, setAnimals] = useState<Animal[]>([]); //Animals load into -- imports types from animal.ts
+  const [creaturas, setCreaturas] = useState<Creatura[]>([]); //Creaturas load into -- impots type from creatura.ts
+  const [mode, setMode] = useState<Mode>("start"); //Keeps track of mode for flow and sets initial value to start
+  const [usedAnimalIds, setUsedAnimalIds] = useState<string[]>([]); //keeps track of used animal ids so we dont reuse in random picker
+  const [currentAnimal, setCurrentAnimal] = useState<Animal | null>(null);//keeps track of current animal
+  const [currentCreatura, setCurrentCreatura] = useState<Creatura | null>(null); //keeps track of current creatura
+  const [proposedName, setProposedName] = useState(""); //keeps track of proposed name
+  const [selectedType, setSelectedType] = //keeps track of type to use with mode and for flow
     useState<"dog" | "cat" | null>(null);
   const [catsSeenCount, setCatsSeenCount] = useState(0); //Use state for how many cats the user has seen -- we need to know if they have seen at least one for the flow
 
 
+  //fetches all animals and creaturas from apis on inital load and sets data
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -58,7 +61,12 @@ const WhimPage = () => {
   }, []);
 
 
-
+//animal flow function 
+//takes which type of animal it is, filters the animals to that type, if its a cat increments cats seen
+//for all animals determines if there are any left to see, if not sets mode to complete,
+//if yes then selects a random animal of the provided type
+//keeps track of "used" animal ids
+//sets mode to naming
   const startAnimalFlow = (type: "dog" | "cat") => {
     setSelectedType(type);
     setCurrentCreatura(null);
@@ -87,6 +95,10 @@ const WhimPage = () => {
     setMode("naming");
   };
 
+
+  //function for creating creatura, uses the already created post function
+  //this happens when the button for set name is pressed
+  //it creates a creatura, sets the current creatura, the proposed name, and changes mode to confirming
   const handleCreateCreatura = async () => {
     if (!currentAnimal) return;
 
@@ -108,28 +120,32 @@ const WhimPage = () => {
     }
   };
 
+  //This is the function used in the confirming mode -- uses PUT function to update a creatura
+  //
   const handleUpdateCreatura = async () => {
-    if (!currentCreatura) return;
+    if (!currentCreatura) return; //makes sure there is a current creatura
 
     try {
-      const updated = await updateCreatura({
-        ...currentCreatura,
+      const updated = await updateCreatura({ //calls the update API
+        ...currentCreatura, //spreads existing creatura data to keep all exisiting fields and just overriding the name with the new proposed name
         name: proposedName,
       });
 
-      setCurrentCreatura(updated);
+      setCurrentCreatura(updated); //updates the state with the API info and the new name
 
-      setCreaturas(prev =>
+      setCreaturas(prev => //updates the creatura array in state so that the newly updated version changes but all else stays
         prev.map(c => (c.id === updated.id ? updated : c))
       );
 
-      setMode("confirming");
-      setProposedName("");
+      setMode("confirming"); //move to confirming mode so that user can approve the new name
+      setProposedName(""); //clear input field
     } catch (error) {
       console.error("Error updating creatura:", error);
     }
   };
 
+
+  //Clearing function to reset all local state if the user starts again
   const resetToStart = () => {
     setUsedAnimalIds([]);
     setCurrentAnimal(null);
@@ -138,29 +154,33 @@ const WhimPage = () => {
     setMode("start");
     setCatsSeenCount(0);
   };
-
+  
+  //RENDERING!!!
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Header />
       <div style={{ flex: 1 }}>
         <Container className="text-center mt-5">
 
-          {/* START SCREEN */}
+          {/* START SCREEN */} 
+          {/**This is cool. Rendering is conditionally based on mode, first is start mode */}
           {mode === "start" && (
             <>
               <h1>Where shall we begin?</h1>
 
+              {/**if user chooses to name a puppy, startanimal flow tye dog */}
               <Button
                 className="m-2"
-                onClick={() => startAnimalFlow("dog")}
+                onClick={() => startAnimalFlow("dog")} 
               >
                 Name a Puppy!
               </Button>
 
+              {/**If user chooses not a dog person then animal flow starts with type cat */}
               <Button
                 className="m-2"
                 variant="secondary"
-                onClick={() => startAnimalFlow("cat")}
+                onClick={() => startAnimalFlow("cat")} 
               >
                 I'm not a dog person
               </Button>
@@ -168,6 +188,7 @@ const WhimPage = () => {
           )}
 
           {/* NAMING SCREEN */}
+          {/**If mode is set to naming, there is a current animal and a selected type - will render Animal Card Component */}
           {mode === "naming" && currentAnimal && selectedType && (
             <AnimalCard
               animal={currentAnimal}
@@ -191,6 +212,7 @@ const WhimPage = () => {
           )}
 
           {/* CONFIRMING */}
+          {/**If  in confirming mode and there is a currentCreatura then render the ConfirmingCard Component */}
           {mode === "confirming" && currentCreatura && (
             <ConfirmingCard
               creatura={currentCreatura}
