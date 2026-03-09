@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Container, Button, Modal, Form } from "react-bootstrap";
 import Header from "../components/Header";
 
+//Set Use State
 const VoidPage = () => {
   const [screams, setScreams] = useState<string[]>([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false); //Determines modal use state if showing or not
   const [currentMessage, setCurrentMessage] = useState("");
 
   // Automatically clear screams when leaving page
@@ -14,6 +15,7 @@ const VoidPage = () => {
     };
   }, []);
 
+  //Handles submit button in modal, updates screams use state
   const handleSubmit = () => {
     if (currentMessage.trim() === "") return;
 
@@ -22,15 +24,18 @@ const VoidPage = () => {
     setShowModal(false);
   };
 
+  //function for abyss button -- empties out screams use state
   const handleRelease = () => {
     setScreams([]);
   };
 
+  //RENDERING!
   return (
     <div style={{ backgroundColor: "black", minHeight: "100vh", color: "white" }}>
         <Header />
       <Container fluid className="text-center pt-5">
 
+        {/**This button updates modal state to true and modal pops up */}
         <Button
           variant="light"
           size="lg"
@@ -49,6 +54,7 @@ const VoidPage = () => {
           ))}
         </div>
 
+          {/**Renders the abyss button based on if there are currently any screams showing */}
         {screams.length > 0 && (
           <Button
             variant="danger"
@@ -61,7 +67,7 @@ const VoidPage = () => {
 
       </Container>
 
-      {/* Modal */}
+      {/* Modal --React bootstrap component */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>At the top of your lungs....</Modal.Title>
